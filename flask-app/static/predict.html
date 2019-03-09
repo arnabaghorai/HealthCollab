@@ -1,0 +1,104 @@
+
+<!doctype html>
+<html lang="en">
+  <head>
+    <!-- Required meta tags -->
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
+
+    <!-- Bootstrap CSS -->
+    <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/css/bootstrap.min.css">
+ <!-- <link href="css/custom.css" rel="stylesheet">
+  <link rel="stylesheet" href="https://use.fontawesome.com/releases/v5.2.0/css/all.css" integrity="sha384-hWVjflwFxL6sNzntih27bfxkr27PmbbK/iSvJ+a4+0owXq79v+lsFkW54bOGbiDQ" crossorigin="anonymous"> -->
+	 <title>Predict</title>
+  	</head>
+  		
+
+<!------ Include the above in your HEAD tag ---------->
+
+<!-- All the files that are required -->
+
+
+<!-- Where all the magic happens -->
+<!-- LOGIN FORM -->
+<body style = " background-color : black ">
+<div class ="container">
+	<!--<div class="full-bg-img"> -->
+  	<div class= "row">
+  		<div class="col-xs-5">
+  		
+  			<div class="logo text-center"><h2 style = "color : white">Add Symptoms</h2></div>
+	<!-- Main Form -->
+			<div class="symptom-form-1">
+				<form id="symptom-form" class="text-left">
+				
+				<label for="sym1" ></label>
+							<input type="number" class="form-control" id="sym1" min="1" max="10"  placeholder="Clump thickness">
+							
+				<label for="sym2" ></label>
+							<input type="number" class="form-control" id="sym2" min="1" max="10" placeholder="Uniformity of cell size">
+				<label for="sym3" ></label>
+							<input type="number" class="form-control" id="sym3" min="1" max="10"  placeholder="Uniformity of cell shape">
+				<label for="sym4" ></label>
+							<input type="number" class="form-control" id="sym4" min="1" max="10"  placeholder="Marginal adhesion">
+				<label for="sym5" ></label>
+							<input type="number" class="form-control" id="sym5" min="1" max="10" placeholder="Single epithelial cell size">
+				<label for="sym6" ></label>
+							<input type="number" class="form-control" id="sym6" min="1" max="10" placeholder="Number of bare nuclei">
+				<label for="sym7" ></label>
+							<input type="number" class="form-control" id="sym7" min="1" max="10" placeholder="Bland chromatin">
+				<label for="sym8" ></label>
+							<input type="number" class="form-control" id="sym8" min="1" max="10" placeholder="Number of normal nuclei">
+							
+				<label for="sym9" ></label>
+							<input type="number" class="form-control" id="sym9" min="1" max="10"  placeholder="Mitosis">
+				
+
+							<div>
+							<br></br>
+							<button id = 'predict-button' type ="button" style="color:inherit" >Predict</a></button><br><p style = "color: white">		Type: <span id="type"></span></p>
+							
+						</div> 
+					
+					</div>
+				</form>
+			</div>
+		</div>
+
+	<!--	<div class="col-md-6 wow fadeInRight d-flex justify-content-center" data-wow-delay="0.3s">
+                    <img src="img/s.jpg" alt="" class="img-responsive">
+             </div> -->
+	<!-- </div>
+	end:Main Form -->
+	</div>
+
+</div>
+
+
+
+	<script src="https://code.jquery.com/jquery-3.3.1.min.js"></script>
+	<script>
+		$("#predict-button").click(function(event){
+		let symptoms={
+			"sym1":$("#sym1").val(),
+			"sym2":$("#sym2").val(),
+			"sym3":$("#sym3").val(),
+			"sym4":$("#sym4").val(),
+			"sym5":$("#sym5").val(),
+			"sym6":$("#sym6").val(),
+			"sym7":$("#sym7").val(),
+			"sym8":$("#sym8").val(),
+			"sym9":$("#sym9").val(),
+				}
+
+			console.log(symptoms);
+			$.post("http://localhost:5000/predict",JSON.stringify(symptoms),function(response){
+			$("#type").text(response.prediction);
+			console.log(response);
+
+			
+				});
+		});
+	</script>
+</body>
+</html>
