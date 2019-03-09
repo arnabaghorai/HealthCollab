@@ -1,0 +1,711 @@
+<!doctype html>
+<html lang="en">
+  <head>
+  	<meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
+
+    <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/css/bootstrap.min.css">
+ <!-- <link href="css/custom.css" rel="stylesheet">
+  <link rel="stylesheet" href="https://use.fontawesome.com/releases/v5.2.0/css/all.css" integrity="sha384-hWVjflwFxL6sNzntih27bfxkr27PmbbK/iSvJ+a4+0owXq79v+lsFkW54bOGbiDQ" crossorigin="anonymous"> -->
+	 <title>Get Record</title>
+  	</head>
+  	
+  	<body>
+  	<script src="https://ajax.googleapis.com/ajax/libs/jquery/1.12.4/jquery.min.js"></script>
+    <script src="js/bootstrap.min.js"></script>
+	<script src="https://code.jquery.com/jquery-3.3.1.min.js"></script>
+    <script src="js/web3.min.js"></script>
+
+    <script>
+      // Initialize Web3
+      if (typeof web3 !== 'undefined') {
+        web3 = new Web3(web3.currentProvider);
+      } else {
+        web3 = new Web3(new Web3.providers.HttpProvider('http://localhost:7545'));
+      }
+
+      // Set Account
+      web3.eth.defaultAccount = web3.eth.accounts[0];
+
+	//const fs = require('fs');
+      const contractAbi =[
+	{
+		"constant": false,
+		"inputs": [
+			{
+				"name": "_parameters",
+				"type": "uint256[]"
+			},
+			{
+				"name": "_patient",
+				"type": "address"
+			},
+			{
+				"name": "_count",
+				"type": "uint256"
+			}
+		],
+		"name": "addSymptoms",
+		"outputs": [],
+		"payable": false,
+		"stateMutability": "nonpayable",
+		"type": "function"
+	},
+	{
+		"constant": false,
+		"inputs": [
+			{
+				"name": "_tokenReward",
+				"type": "uint256"
+			}
+		],
+		"name": "setSpringTokenReward",
+		"outputs": [],
+		"payable": false,
+		"stateMutability": "nonpayable",
+		"type": "function"
+	},
+	{
+		"constant": true,
+		"inputs": [
+			{
+				"name": "_patientAddress",
+				"type": "address"
+			},
+			{
+				"name": "_number",
+				"type": "uint256"
+			}
+		],
+		"name": "checkLogin",
+		"outputs": [
+			{
+				"name": "",
+				"type": "bool"
+			}
+		],
+		"payable": false,
+		"stateMutability": "view",
+		"type": "function"
+	},
+	{
+		"constant": true,
+		"inputs": [],
+		"name": "MAX_PARAMETERS",
+		"outputs": [
+			{
+				"name": "",
+				"type": "uint256"
+			}
+		],
+		"payable": false,
+		"stateMutability": "view",
+		"type": "function"
+	},
+	{
+		"constant": true,
+		"inputs": [
+			{
+				"name": "_patientAddress",
+				"type": "address"
+			}
+		],
+		"name": "getPatientBalance",
+		"outputs": [
+			{
+				"name": "",
+				"type": "uint256"
+			}
+		],
+		"payable": false,
+		"stateMutability": "view",
+		"type": "function"
+	},
+	{
+		"constant": true,
+		"inputs": [
+			{
+				"name": "from",
+				"type": "uint256"
+			},
+			{
+				"name": "to",
+				"type": "uint256"
+			}
+		],
+		"name": "getCurrentPatients",
+		"outputs": [
+			{
+				"name": "_numberOfPatients",
+				"type": "uint256"
+			}
+		],
+		"payable": false,
+		"stateMutability": "view",
+		"type": "function"
+	},
+	{
+		"constant": true,
+		"inputs": [],
+		"name": "springToken",
+		"outputs": [
+			{
+				"name": "",
+				"type": "address"
+			}
+		],
+		"payable": false,
+		"stateMutability": "view",
+		"type": "function"
+	},
+	{
+		"constant": true,
+		"inputs": [],
+		"name": "MAX_COUNT",
+		"outputs": [
+			{
+				"name": "",
+				"type": "uint256"
+			}
+		],
+		"payable": false,
+		"stateMutability": "view",
+		"type": "function"
+	},
+	{
+		"constant": false,
+		"inputs": [
+			{
+				"name": "_patient",
+				"type": "address"
+			}
+		],
+		"name": "removePatient",
+		"outputs": [],
+		"payable": false,
+		"stateMutability": "nonpayable",
+		"type": "function"
+	},
+	{
+		"constant": false,
+		"inputs": [
+			{
+				"name": "_hospital",
+				"type": "address"
+			},
+			{
+				"name": "_password",
+				"type": "uint256"
+			}
+		],
+		"name": "addHospital",
+		"outputs": [],
+		"payable": false,
+		"stateMutability": "nonpayable",
+		"type": "function"
+	},
+	{
+		"constant": true,
+		"inputs": [
+			{
+				"name": "",
+				"type": "address"
+			}
+		],
+		"name": "isPatient",
+		"outputs": [
+			{
+				"name": "",
+				"type": "bool"
+			}
+		],
+		"payable": false,
+		"stateMutability": "view",
+		"type": "function"
+	},
+	{
+		"constant": true,
+		"inputs": [],
+		"name": "recordCount",
+		"outputs": [
+			{
+				"name": "",
+				"type": "uint256"
+			}
+		],
+		"payable": false,
+		"stateMutability": "view",
+		"type": "function"
+	},
+	{
+		"constant": true,
+		"inputs": [],
+		"name": "tokenRewardAmount",
+		"outputs": [
+			{
+				"name": "",
+				"type": "uint256"
+			}
+		],
+		"payable": false,
+		"stateMutability": "view",
+		"type": "function"
+	},
+	{
+		"constant": true,
+		"inputs": [],
+		"name": "tokenAddress",
+		"outputs": [
+			{
+				"name": "",
+				"type": "address"
+			}
+		],
+		"payable": false,
+		"stateMutability": "view",
+		"type": "function"
+	},
+	{
+		"constant": true,
+		"inputs": [
+			{
+				"name": "_pass",
+				"type": "uint256"
+			}
+		],
+		"name": "getSHA",
+		"outputs": [
+			{
+				"name": "",
+				"type": "bytes32"
+			}
+		],
+		"payable": false,
+		"stateMutability": "pure",
+		"type": "function"
+	},
+	{
+		"constant": false,
+		"inputs": [
+			{
+				"name": "_hospital",
+				"type": "address"
+			},
+			{
+				"name": "_password",
+				"type": "uint256"
+			}
+		],
+		"name": "removeHospital",
+		"outputs": [],
+		"payable": false,
+		"stateMutability": "nonpayable",
+		"type": "function"
+	},
+	{
+		"constant": true,
+		"inputs": [
+			{
+				"name": "",
+				"type": "address"
+			}
+		],
+		"name": "isHospital",
+		"outputs": [
+			{
+				"name": "",
+				"type": "bool"
+			}
+		],
+		"payable": false,
+		"stateMutability": "view",
+		"type": "function"
+	},
+	{
+		"constant": false,
+		"inputs": [
+			{
+				"name": "_patient",
+				"type": "address"
+			},
+			{
+				"name": "_passkey",
+				"type": "uint256"
+			}
+		],
+		"name": "addPatient",
+		"outputs": [],
+		"payable": false,
+		"stateMutability": "nonpayable",
+		"type": "function"
+	},
+	{
+		"constant": true,
+		"inputs": [
+			{
+				"name": "_patientAddress",
+				"type": "address"
+			},
+			{
+				"name": "_count",
+				"type": "uint256"
+			}
+		],
+		"name": "getRecord",
+		"outputs": [
+			{
+				"name": "_hospital",
+				"type": "address"
+			},
+			{
+				"name": "_admissionDate",
+				"type": "uint256"
+			},
+			{
+				"name": "_dischargeDate",
+				"type": "uint256"
+			},
+			{
+				"name": "_visitReason",
+				"type": "uint256"
+			},
+			{
+				"name": "_symptoms",
+				"type": "uint256[]"
+			}
+		],
+		"payable": false,
+		"stateMutability": "view",
+		"type": "function"
+	},
+	{
+		"constant": false,
+		"inputs": [
+			{
+				"name": "_patientAddress",
+				"type": "address"
+			},
+			{
+				"name": "_hospital",
+				"type": "address"
+			},
+			{
+				"name": "_admissionDate",
+				"type": "uint256"
+			},
+			{
+				"name": "_dischargeDate",
+				"type": "uint256"
+			},
+			{
+				"name": "_visitReason",
+				"type": "uint256"
+			}
+		],
+		"name": "addRecord",
+		"outputs": [],
+		"payable": false,
+		"stateMutability": "nonpayable",
+		"type": "function"
+	},
+	{
+		"inputs": [
+			{
+				"name": "_hospital",
+				"type": "address"
+			},
+			{
+				"name": "_password",
+				"type": "uint256"
+			}
+		],
+		"payable": true,
+		"stateMutability": "payable",
+		"type": "constructor"
+	},
+	{
+		"anonymous": false,
+		"inputs": [
+			{
+				"indexed": false,
+				"name": "hospital",
+				"type": "address"
+			}
+		],
+		"name": "HospitalAddition",
+		"type": "event"
+	},
+	{
+		"anonymous": false,
+		"inputs": [
+			{
+				"indexed": true,
+				"name": "sender",
+				"type": "address"
+			},
+			{
+				"indexed": false,
+				"name": "value",
+				"type": "uint256"
+			}
+		],
+		"name": "Deposit",
+		"type": "event"
+	},
+	{
+		"anonymous": false,
+		"inputs": [
+			{
+				"indexed": false,
+				"name": "hospital",
+				"type": "address"
+			}
+		],
+		"name": "HospitalRemoval",
+		"type": "event"
+	},
+	{
+		"anonymous": false,
+		"inputs": [
+			{
+				"indexed": false,
+				"name": "patient",
+				"type": "address"
+			}
+		],
+		"name": "PatientAddition",
+		"type": "event"
+	},
+	{
+		"anonymous": false,
+		"inputs": [
+			{
+				"indexed": false,
+				"name": "patient",
+				"type": "address"
+			}
+		],
+		"name": "PatientRemoval",
+		"type": "event"
+	},
+	{
+		"anonymous": false,
+		"inputs": [
+			{
+				"indexed": false,
+				"name": "recordID",
+				"type": "uint256"
+			},
+			{
+				"indexed": false,
+				"name": "patientAddress",
+				"type": "address"
+			}
+		],
+		"name": "PatientRecordAdded",
+		"type": "event"
+	},
+	{
+		"anonymous": false,
+		"inputs": [
+			{
+				"indexed": false,
+				"name": "recordID",
+				"type": "uint256"
+			},
+			{
+				"indexed": false,
+				"name": "patientAddress",
+				"type": "address"
+			}
+		],
+		"name": "NameAddedToRecords",
+		"type": "event"
+	},
+	{
+		"anonymous": false,
+		"inputs": [
+			{
+				"indexed": false,
+				"name": "tokenReward",
+				"type": "uint256"
+			}
+		],
+		"name": "TokenRewardSet",
+		"type": "event"
+	},
+	{
+		"anonymous": false,
+		"inputs": [
+			{
+				"indexed": false,
+				"name": "patientAddress",
+				"type": "address"
+			}
+		],
+		"name": "PatientPaid",
+		"type": "event"
+	}
+];
+	var contractAddress = '0x3D6AE3DB4545519d78a070d52024c147bE7007a4';// Add Your Contract address here!!!//0x05E94BE55F61D09d86C515F15631b2B53809d89a
+
+      // Set the Contract
+var contract1 = web3.eth.contract(contractAbi).at(contractAddress);
+
+
+
+</script>
+<script src="https://code.jquery.com/jquery-3.3.1.min.js"></script>
+
+
+  <div class ="container">
+	<!--<div class="full-bg-img"> -->
+  	<div class= "row">
+  		<div class="col-xs-5">
+  		
+  			<div class="logo text-center"><h2>Get Record</h2></div>
+
+  		
+		<label  ></label>
+							<input type="text" class="form-control" id="pat-address"   placeholder="Patient Address">
+	
+		<br></br>
+		<div class="form-group">
+								<label for="lg_password">Password</label>
+								<input type="password" class="form-control" id="lg_password" name="lg_password" placeholder="password (Integer only)" />
+							</div>
+		
+		
+		
+		<label  ></label>
+		<input type="number" class="form-control" id="count"   placeholder="Count">
+	
+		<br></br>
+		<button id = 'get' onclick="fun()" type ="button" style="color:inherit" >Get Record</a></button>
+
+		<br></br>
+		
+  		
+  		<label for="hos-address" >Hospital Address : </label><p id ="p2"></p>
+  		<br></br>
+  		<label for="date1" >Date of Arrival: </label><p id ="p3"></p>
+  		<br></br>
+  		<label for="date2" >Date of Discharge : </label><p id ="p4"></p>
+  		<br></br>
+  		<label for="rov" >Reason of Visit : </label><p id ="p5"></p>
+  		<br></br>
+  		</div></div>
+  		<p></p>
+  		<br></br>
+  		<br></br>
+  		<br></br>
+  		<br></br>
+  		 <div class="logo text-center"><h2>Symptoms</h2></div>
+
+  		<label for="sym1" >Clump thickness : </label><p id ="sym1"></p>
+  		<br></br>
+  		<label for="sym2" >Uniformity of cell size : </label><p id ="sym2"></p>
+  		<br></br>
+  		<label for="sym3" >Uniformity of cell shape: </label><p id ="sym3"></p>
+  		<br></br>
+  		<label for="sym4" >Marginal adhesion: </label><p id ="sym4"></p>
+  		<br></br>
+  		<label for="sym5" >Single epithelial cell size : </label><p id ="sym5"></p>
+  		<br></br>
+  		<label for="sym6" >Number of bare nuclei : </label><p id ="sym6"></p>
+  		<br></br>
+  		<label for="sym7" >Bland chromatin: </label><p id ="sym7"></p>
+  		<br></br>
+  		<label for="sym8" >Number of normal nuclei: </label><p id ="sym8"></p>
+  		<br></br>
+  		<label for="sym9" >Mitosis : </label><p id ="sym9"></p>
+  		<br></br>
+  		<label for="reason" >Result : </label><p id ="rea"></p>
+  		<br></br>
+  		</div>
+  		</div>
+  		</div>
+  	</div>
+
+  	<script type="text/javascript">
+  		
+  		function fun() {
+  			// body...
+
+  			 var patient = $("#pat-address").val();
+  			 var count = $("#count").val();
+  			  var pas =  $("#lg_password").val();
+
+  			var record = contract1.getRecord(patient , count);
+  			console.log(record)
+  			
+  			value = contract1.checkLogin(patient,pas);
+  			
+  			if(value){
+
+
+
+  			$("#p2").text(record[0]);
+  			$("#p3").text(record[1].toNumber());
+  			$("#p4").text(record[2].toNumber());
+  			$("#p5").text(record[3].toNumber());
+
+  			$("#sym1").text(record[4][0].toNumber());
+  			$("#sym2").text(record[4][1].toNumber());
+  			$("#sym3").text(record[4][2].toNumber());
+  			$("#sym4").text(record[4][3].toNumber());
+  			$("#sym5").text(record[4][4].toNumber());
+  			$("#sym6").text(record[4][5].toNumber());
+  			$("#sym7").text(record[4][6].toNumber());
+  			$("#sym8").text(record[4][7].toNumber());
+  			$("#sym9").text(record[4][8].toNumber());
+  			$("#rea").text(record[4][9].toNumber());
+
+  			let mess={
+
+  			'hos' : record[0],
+  			'd1' : record[1],
+  			'd2' : record[2],
+  			'r' : record[3],
+
+
+			"sym1":record[4][0],
+			"sym2":record[4][1],
+			"sym3":record[4][2],
+			"sym4":record[4][3],
+			"sym5":record[4][4],
+			"sym6":record[4][5],
+			"sym7":record[4][6],
+			"sym8":record[4][7],
+			"sym9":record[4][8],
+
+			"re":record[4][9]
+				}
+
+  			console.log(record);
+  			contract1.payPa
+
+  			saveText( JSON.stringify(record), "filename.json" );
+
+  		}
+
+  		else if(!value){
+  			alert("Wrong password");
+  		}
+
+  		}
+
+
+//alert(mydata[0].age);
+//alert(mydata[1].name);
+//alert(mydata[1].age);
+  		function saveText(text, filename){
+  var a = document.createElement('a');
+  a.setAttribute('href', 'data:text/plain;charset=utf-u,'+encodeURIComponent(text));
+  a.setAttribute('download', filename);
+  a.click()
+}
+
+
+  	</script>
+  	</body>

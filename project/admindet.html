@@ -1,0 +1,679 @@
+<!doctype html>
+<html lang="en">
+  <head>
+    <!-- Required meta tags -->
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
+
+    <!-- Bootstrap CSS -->
+    <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/css/bootstrap.min.css">
+  <link href="css/custom.css" rel="stylesheet">
+  <link rel="stylesheet" href="https://use.fontawesome.com/releases/v5.2.0/css/all.css" integrity="sha384-hWVjflwFxL6sNzntih27bfxkr27PmbbK/iSvJ+a4+0owXq79v+lsFkW54bOGbiDQ" crossorigin="anonymous">
+
+
+
+	 <title>Admin</title>
+  	</head>
+  	<body>
+
+  	  	<script src="https://ajax.googleapis.com/ajax/libs/jquery/1.12.4/jquery.min.js"></script>
+    <script src="js/bootstrap.min.js"></script>
+	<script src="https://code.jquery.com/jquery-3.3.1.min.js"></script>
+    <script src="js/web3.min.js"></script>
+    
+	<script>
+		if (typeof web3 !== 'undefined') {
+        web3 = new Web3(web3.currentProvider);
+      } else {
+        web3 = new Web3(new Web3.providers.HttpProvider('http://localhost:7545'));
+      }
+	  web3.eth.defaultAccount = web3.eth.accounts[0];
+	  const contractAbi =[
+	{
+		"constant": false,
+		"inputs": [
+			{
+				"name": "_parameters",
+				"type": "uint256[]"
+			},
+			{
+				"name": "_patient",
+				"type": "address"
+			},
+			{
+				"name": "_count",
+				"type": "uint256"
+			}
+		],
+		"name": "addSymptoms",
+		"outputs": [],
+		"payable": false,
+		"stateMutability": "nonpayable",
+		"type": "function"
+	},
+	{
+		"constant": false,
+		"inputs": [
+			{
+				"name": "_tokenReward",
+				"type": "uint256"
+			}
+		],
+		"name": "setSpringTokenReward",
+		"outputs": [],
+		"payable": false,
+		"stateMutability": "nonpayable",
+		"type": "function"
+	},
+	{
+		"constant": true,
+		"inputs": [
+			{
+				"name": "_patientAddress",
+				"type": "address"
+			},
+			{
+				"name": "_number",
+				"type": "uint256"
+			}
+		],
+		"name": "checkLogin",
+		"outputs": [
+			{
+				"name": "",
+				"type": "bool"
+			}
+		],
+		"payable": false,
+		"stateMutability": "view",
+		"type": "function"
+	},
+	{
+		"constant": true,
+		"inputs": [],
+		"name": "MAX_PARAMETERS",
+		"outputs": [
+			{
+				"name": "",
+				"type": "uint256"
+			}
+		],
+		"payable": false,
+		"stateMutability": "view",
+		"type": "function"
+	},
+	{
+		"constant": true,
+		"inputs": [
+			{
+				"name": "_patientAddress",
+				"type": "address"
+			}
+		],
+		"name": "getPatientBalance",
+		"outputs": [
+			{
+				"name": "",
+				"type": "uint256"
+			}
+		],
+		"payable": false,
+		"stateMutability": "view",
+		"type": "function"
+	},
+	{
+		"constant": true,
+		"inputs": [
+			{
+				"name": "from",
+				"type": "uint256"
+			},
+			{
+				"name": "to",
+				"type": "uint256"
+			}
+		],
+		"name": "getCurrentPatients",
+		"outputs": [
+			{
+				"name": "_numberOfPatients",
+				"type": "uint256"
+			}
+		],
+		"payable": false,
+		"stateMutability": "view",
+		"type": "function"
+	},
+	{
+		"constant": true,
+		"inputs": [],
+		"name": "springToken",
+		"outputs": [
+			{
+				"name": "",
+				"type": "address"
+			}
+		],
+		"payable": false,
+		"stateMutability": "view",
+		"type": "function"
+	},
+	{
+		"constant": true,
+		"inputs": [],
+		"name": "MAX_COUNT",
+		"outputs": [
+			{
+				"name": "",
+				"type": "uint256"
+			}
+		],
+		"payable": false,
+		"stateMutability": "view",
+		"type": "function"
+	},
+	{
+		"constant": false,
+		"inputs": [
+			{
+				"name": "_patient",
+				"type": "address"
+			}
+		],
+		"name": "removePatient",
+		"outputs": [],
+		"payable": false,
+		"stateMutability": "nonpayable",
+		"type": "function"
+	},
+	{
+		"constant": false,
+		"inputs": [
+			{
+				"name": "_hospital",
+				"type": "address"
+			},
+			{
+				"name": "_password",
+				"type": "uint256"
+			}
+		],
+		"name": "addHospital",
+		"outputs": [],
+		"payable": false,
+		"stateMutability": "nonpayable",
+		"type": "function"
+	},
+	{
+		"constant": true,
+		"inputs": [
+			{
+				"name": "",
+				"type": "address"
+			}
+		],
+		"name": "isPatient",
+		"outputs": [
+			{
+				"name": "",
+				"type": "bool"
+			}
+		],
+		"payable": false,
+		"stateMutability": "view",
+		"type": "function"
+	},
+	{
+		"constant": true,
+		"inputs": [],
+		"name": "recordCount",
+		"outputs": [
+			{
+				"name": "",
+				"type": "uint256"
+			}
+		],
+		"payable": false,
+		"stateMutability": "view",
+		"type": "function"
+	},
+	{
+		"constant": true,
+		"inputs": [],
+		"name": "tokenRewardAmount",
+		"outputs": [
+			{
+				"name": "",
+				"type": "uint256"
+			}
+		],
+		"payable": false,
+		"stateMutability": "view",
+		"type": "function"
+	},
+	{
+		"constant": true,
+		"inputs": [],
+		"name": "tokenAddress",
+		"outputs": [
+			{
+				"name": "",
+				"type": "address"
+			}
+		],
+		"payable": false,
+		"stateMutability": "view",
+		"type": "function"
+	},
+	{
+		"constant": true,
+		"inputs": [
+			{
+				"name": "_pass",
+				"type": "uint256"
+			}
+		],
+		"name": "getSHA",
+		"outputs": [
+			{
+				"name": "",
+				"type": "bytes32"
+			}
+		],
+		"payable": false,
+		"stateMutability": "pure",
+		"type": "function"
+	},
+	{
+		"constant": false,
+		"inputs": [
+			{
+				"name": "_hospital",
+				"type": "address"
+			},
+			{
+				"name": "_password",
+				"type": "uint256"
+			}
+		],
+		"name": "removeHospital",
+		"outputs": [],
+		"payable": false,
+		"stateMutability": "nonpayable",
+		"type": "function"
+	},
+	{
+		"constant": true,
+		"inputs": [
+			{
+				"name": "",
+				"type": "address"
+			}
+		],
+		"name": "isHospital",
+		"outputs": [
+			{
+				"name": "",
+				"type": "bool"
+			}
+		],
+		"payable": false,
+		"stateMutability": "view",
+		"type": "function"
+	},
+	{
+		"constant": false,
+		"inputs": [
+			{
+				"name": "_patient",
+				"type": "address"
+			},
+			{
+				"name": "_passkey",
+				"type": "uint256"
+			}
+		],
+		"name": "addPatient",
+		"outputs": [],
+		"payable": false,
+		"stateMutability": "nonpayable",
+		"type": "function"
+	},
+	{
+		"constant": true,
+		"inputs": [
+			{
+				"name": "_patientAddress",
+				"type": "address"
+			},
+			{
+				"name": "_count",
+				"type": "uint256"
+			}
+		],
+		"name": "getRecord",
+		"outputs": [
+			{
+				"name": "_hospital",
+				"type": "address"
+			},
+			{
+				"name": "_admissionDate",
+				"type": "uint256"
+			},
+			{
+				"name": "_dischargeDate",
+				"type": "uint256"
+			},
+			{
+				"name": "_visitReason",
+				"type": "uint256"
+			},
+			{
+				"name": "_symptoms",
+				"type": "uint256[]"
+			}
+		],
+		"payable": false,
+		"stateMutability": "view",
+		"type": "function"
+	},
+	{
+		"constant": false,
+		"inputs": [
+			{
+				"name": "_patientAddress",
+				"type": "address"
+			},
+			{
+				"name": "_hospital",
+				"type": "address"
+			},
+			{
+				"name": "_admissionDate",
+				"type": "uint256"
+			},
+			{
+				"name": "_dischargeDate",
+				"type": "uint256"
+			},
+			{
+				"name": "_visitReason",
+				"type": "uint256"
+			}
+		],
+		"name": "addRecord",
+		"outputs": [],
+		"payable": false,
+		"stateMutability": "nonpayable",
+		"type": "function"
+	},
+	{
+		"inputs": [
+			{
+				"name": "_hospital",
+				"type": "address"
+			},
+			{
+				"name": "_password",
+				"type": "uint256"
+			}
+		],
+		"payable": true,
+		"stateMutability": "payable",
+		"type": "constructor"
+	},
+	{
+		"anonymous": false,
+		"inputs": [
+			{
+				"indexed": false,
+				"name": "hospital",
+				"type": "address"
+			}
+		],
+		"name": "HospitalAddition",
+		"type": "event"
+	},
+	{
+		"anonymous": false,
+		"inputs": [
+			{
+				"indexed": true,
+				"name": "sender",
+				"type": "address"
+			},
+			{
+				"indexed": false,
+				"name": "value",
+				"type": "uint256"
+			}
+		],
+		"name": "Deposit",
+		"type": "event"
+	},
+	{
+		"anonymous": false,
+		"inputs": [
+			{
+				"indexed": false,
+				"name": "hospital",
+				"type": "address"
+			}
+		],
+		"name": "HospitalRemoval",
+		"type": "event"
+	},
+	{
+		"anonymous": false,
+		"inputs": [
+			{
+				"indexed": false,
+				"name": "patient",
+				"type": "address"
+			}
+		],
+		"name": "PatientAddition",
+		"type": "event"
+	},
+	{
+		"anonymous": false,
+		"inputs": [
+			{
+				"indexed": false,
+				"name": "patient",
+				"type": "address"
+			}
+		],
+		"name": "PatientRemoval",
+		"type": "event"
+	},
+	{
+		"anonymous": false,
+		"inputs": [
+			{
+				"indexed": false,
+				"name": "recordID",
+				"type": "uint256"
+			},
+			{
+				"indexed": false,
+				"name": "patientAddress",
+				"type": "address"
+			}
+		],
+		"name": "PatientRecordAdded",
+		"type": "event"
+	},
+	{
+		"anonymous": false,
+		"inputs": [
+			{
+				"indexed": false,
+				"name": "recordID",
+				"type": "uint256"
+			},
+			{
+				"indexed": false,
+				"name": "patientAddress",
+				"type": "address"
+			}
+		],
+		"name": "NameAddedToRecords",
+		"type": "event"
+	},
+	{
+		"anonymous": false,
+		"inputs": [
+			{
+				"indexed": false,
+				"name": "tokenReward",
+				"type": "uint256"
+			}
+		],
+		"name": "TokenRewardSet",
+		"type": "event"
+	},
+	{
+		"anonymous": false,
+		"inputs": [
+			{
+				"indexed": false,
+				"name": "patientAddress",
+				"type": "address"
+			}
+		],
+		"name": "PatientPaid",
+		"type": "event"
+	}
+];
+	var contractAddress = '0x3D6AE3DB4545519d78a070d52024c147bE7007a4';
+	var instance = web3.eth.contract(contractAbi).at(contractAddress);</script>
+	<div class ="container">
+  	<div class= "row">
+  		<div class="col-xs-6 ">
+  		</br>
+  			<div class="logo text-center"><h2>Commands</h2></div>
+	<!-- Main Form -->
+			<div class="login-form-1">
+				<form id="login-form" class="text-left">
+					<div class="login-form-main-message"></div>
+					<div class="main-login-form">
+						<div class="login-group">
+							<form action="" method="">
+							<div class="form-group">
+							</br>
+						
+						<label >Patient Address</label>
+						</div>
+						<div class = "button1" >
+						
+								<input type="text" class="form-control" id="pat_add" placeholder="Patient address daal" />
+								<p id="p1">The address is Patient : </p>
+								<br>
+								<button onclick="patClick()"  type="button" id ="isp" class="btn btn-success"  style="color:inherit">IsPatient</button>
+								</div>
+								<br></br>
+								<br></br>
+
+								<input type="text" class="form-control" id="pat" placeholder="New Patient address" />
+								
+								<br></br>
+								<input type="password" class="form-control" id="pass1" name="lg_password" placeholder="password (Integer only)" />
+								<br></br>
+								<button onclick="newpat()"  type="button" id ="isp" class="btn btn-success"  style="color:inherit">Add Patient</button>
+								</div>
+								<br>
+							<div class="form-group2">
+						
+						
+						<label >Hospital Address</label>
+						</div>		
+						<div class = "button2" >
+						
+								<input type="text" class="form-control" id="hos_add" placeholder="Hospital address daal" />
+								<p id="p2">The address is Hospital : 	</p>
+								<br>
+								<button onclick="hosClick()" id="ish" type="button" class="btn btn-success"  style="color:inherit">IsHospital</button>
+								<br></br>
+								<br></br>
+
+								<input type="text" class="form-control" id="new_hos" placeholder="New Hospital address" />
+							
+								<br></br>
+								<input type="password" class="form-control" id="pass2" name="lg_password" placeholder="password (Integer only)" />
+								<br></br>
+								<button onclick="newhos()"  type="button"  class="btn btn-success"  style="color:inherit">Add Hospital</button>
+								</div>
+								<br>		
+							
+							</div>
+							<br></br>
+							<button  type="Submit" class="btn btn-success"  style="color:inherit"><a  href ="file:///C:/Users/Arnab/Desktop/project/getrecordnew%20(1).html">getRecord</a></button>
+						
+							<button  type="Submit" onclick="fn()" class="btn btn-success"  style="color:inherit">
+								<a href="file:///C:/Users/Arnab/Desktop/project/reg.html"> addRecord</a></button>
+
+							<button  type="button" onclick="fn1()" class="btn btn-success"  style="color:inherit">
+								<a href="http://localhost:5000/static/predict.html">Predict</a></button>
+
+						</div>
+					
+				</form>
+			</div>
+		</div>
+	</div>
+
+	<script type="text/javascript">
+		
+		function patClick(){
+
+			pat = $("#pat_add").val();
+			var val = instance.isPatient(pat);
+			$("#p1").text(val);
+		}
+		function hosClick(){
+
+			hos = $("#hos_add").val();
+			var val = instance.isHospital(hos);
+			$("#p2").text(val);
+		}
+
+		function fn(){
+
+			var url = "file:///C:/Users/Arnab/Desktop/project/reg.html";
+			window.location = url;
+			
+		}
+
+		function fn1(){
+			var url = "location:5000/static/predict.html";
+			window.location = url;
+		}
+
+		function newhos(){
+			hos = $("#new_hos").val();
+			pass = $("#pass2").val()
+
+			instance.addHospital(hos , pass);
+
+
+
+		}
+
+		function newpat(){
+			pat = $("#pat").val();
+
+			pass1 = $("#pass1").val()
+
+			instance.addPatient(pat , pass1);
+			
+
+
+		}
+
+	</script>
+
+
+	</body>
+	</html>

@@ -1,0 +1,18 @@
+{
+  "Hospital-Address": "abcd",
+  "Date1": "1",
+  "Date2": "2",
+  "Reason": "1",
+  "Symptoms": {
+    "Clump_thickness": "1",
+    "Uniformity_of_cell_size": "1",
+    "Uniformity_of_cell_shape": "1",
+    "Marginal_adhesion": "1",
+    "Single_epithelial_cell_size": "1",
+    "Number_of_bare_nuclei": "1",
+    "Bland_chromatin": "1",
+    "Number_of_normal_nuclei": "1",
+    "Mitosis": "1",
+    "Classes": "1"
+  }
+}
